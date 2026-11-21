@@ -10,10 +10,13 @@ def show_file_info(file_path:Path)->None:
         return
 
 
+
+
     file_name=file_path.name
     file_extension=file_path.suffix
     file_size=file_path.stat().st_size
 
+    print(f"{file_extension} dosyasi secildi")
 
     print("\n -----DOSYA BİLGİLERİ-----")
     print(f"Dosya Adi: {file_name}")
@@ -34,3 +37,14 @@ def main() -> None:
 
 if __name__=="__main__":
     main()
+
+
+
+# PDF ve DOCX gibi dosya türlerinden metin çıkarma
+# Metinleri anlamlı parçalara (Chucking) ayırma
+# Embedding üretme
+# Vektör Veritabanına kayıt
+# Kullanıcının sorusuna göre en alakalı parçaları bulma
+# Bulunan kaynakları LLM'e gönderme
+# Kaynak göstererek cevap üretme
+# Hataları Yönetme,test yazma ve performansı değerlendirme
