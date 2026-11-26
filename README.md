@@ -31,6 +31,7 @@ ChromaDB'nin Python 3.15 ortamındaki `onnxruntime` kısıtlamalarını ve çak�
 
 ---
 
+
 ## 📦 Kurulum ve Çalıştırma
 
 ### 1. Gereksinimler
@@ -60,8 +61,7 @@ Her şey yüklendikten sonra yerel web arayüzünü ayağa kaldırmak için şu 
 ```
 Tarayıcınızda otomatik olarak `http://localhost:8501` adresi açılacaktır.
 
----
+---PROGRAMIN GÖRÜNTÜLERİ---
 
-## 🗺️ Gelecek Yol Haritası (Next Steps)
-- [ ] **Yerel LLM Entegrasyonu:** ChromaDB'den dönen en alakalı paragraf kaynaklarını, arka planda çalışan **Ollama (Llama3 veya Mistral)** modeline besleyerek kullanıcıya özetlenmiş, kaynak gösteren akıllı cevaplar üretmek.
-- [ ] **Masaüstünden Web Mimarisine Geçiş:** Prototip Streamlit ile tamamen doğrulandıktan sonra, tüm Python çekirdek kodunu gerçek bir web mimarisi olan **FastAPI** backend katmanına taşımak ve frontend arayüzünü özelleştirmek.
+<img width="1909" height="918" alt="Ekran görüntüsü 2026-11-26 160259" src="https://github.com/user-attachments/assets/44755926-863a-43f7-96a6-b4248f113ed6" />
+<img width="1919" height="907" alt="Ekran görüntüsü 2026-11-26 160216" src="https://github.com/user-attachments/assets/cd49e77e-0083-4ca5-8d34-a347c763378c" />
