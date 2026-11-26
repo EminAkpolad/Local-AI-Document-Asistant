@@ -3,6 +3,7 @@ import chromadb
 from pypdf import PdfReader
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 from sentence_transformers import SentenceTransformer
+import ollama
 
 st.set_page_config(page_title="Yerel AI Döküman Asistan",page_icon=None)
 st.title("YEREL AI DÖKÜMAN ASİSTAN")
@@ -68,6 +69,27 @@ def search_in_documents(query:str,n_results:int=3)->list:
        return results.get("documents",[[]])[0]
 
 
+def generate_ai_response(prompt:str,context_chunks:list)->str:
+    
+    context="\n\n".join(context_chunks)
+    
+    system_prompt=(
+        "Sen yerel bir döküman asistanısın. Sana verilen 'Bağlam' (Context) içerisindeki"
+        "bilgileri kullanarak kullanıcının sorusuna net ,doğru ve Türkçe cevaplar vermelisin."
+        "Eğer cevap bağlam içerisinde yoksa, dışarıdan bilgi uydurma ve dürüstçe dökümanda "
+        "bulamadığını belirt."
+    )
+    
+    user_prompt=f"Bağlam:\n{context}\n\nSoru:{prompt}\n\nCevap:"
+    
+    response=ollama.generate(
+        model="qwen3:4b" if "qwen3:4b" in [m['model'] for m in  ollama.list()['models']] else "llama3",
+        prompt=user_prompt,
+        system=system_prompt
+    )
+    return response['response']
+    
+
 with st.sidebar:
     st.header("Döküman Yönetimi")
     uploaded_file=st.file_uploader("Bir Pdf dosyası seçin",type="pdf")
@@ -109,19 +131,19 @@ else:
           st.write(user_query)
 
       with st.chat_message("assistant"):
-          with st.spinner("Döküman İnceleniyor..."):
+            with st.spinner("Döküman İnceleniyor ve Cevap Üretiliyor..."):
                 try:
-                    bulunan_parcalar=search_in_documents(user_query)
+                    bulunan_parcalar = search_in_documents(user_query)
 
                     if bulunan_parcalar:
-                      st.markdown("ChromaDB'nin Dokümanda Bulduğu En Alakalı İçerikler:")
-
-                      for i,parca in enumerate(bulunan_parcalar):
-                        st.info(f"Eşleşen parça {i+1}: \n{parca}")
-
-                      st.write("----")
-                      st.success("Harika! ChomrDB milisaniyeler içinde  PDF'in içindeki en doğru paragrafları buldu.")
+                        yapay_zeka_cevabi = generate_ai_response(user_query, bulunan_parcalar)
+                        
+                        st.markdown(yapay_zeka_cevabi)
+                        
+                        with st.expander("ChromaDB'den Beslenen Kaynak Paragraflar"):
+                            for i, parca in enumerate(bulunan_parcalar):
+                                st.info(f"Eşleşen parça {i+1}: \n{parca}")
                     else:
-                      st.warning("Dökümanda bu soruyla ilgili hiçbir içerik bulunamadı")
+                        st.warning("Dökümanda bu soruyla ilgili hiçbir içerik bulunamadı")
                 except Exception as e: 
                     st.error(f"Arama İşlemi sırasında bir hata oluştu {e}")
